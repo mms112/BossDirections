@@ -1,0 +1,141 @@
+{
+    "offerings": [
+        {
+            "location": "StartTemple",
+            "name": "Stone Altar",
+            "addname": false,
+            "quotes": [
+                "Return to where it all began. It'll make sense, in time.",
+                "Back to the beggining, one can always start again.",
+                "Fear not being lost. You'll eventually reach your goals.",
+                "At the center of the world, we welcome you.",
+                "Fortunate is the adventurer that remember its origins."
+            ],
+            "items": {
+                "stone": 10
+            }
+        },
+        {
+            "location": "Vendor_BlackForest",
+            "name": "Haldor",
+            "addname": true,
+            "quotes": [
+                "Fancy a bit of dwarven charm? Come see me in the forests.",
+                "I've got just the thing to make your day brighter. I'm waiting for you.",
+                "Well, well, well! Looks like we've got a visitor. Come to my shop!",
+                "Well, look who's dropped by! I'm open for business, and your timing is spot on.",
+                "Hey there, wanderer! My little shop is always open to folks like you."
+            ],
+            "items": {
+                "coins": 100
+            }
+        },
+        {
+            "location": "Hildir_camp",
+            "name": "Hildir",
+            "addname": true,
+            "quotes": [
+                "I'm sensing a new face. How are your adventure going?",
+                "Greetings, seeker of quests! I got a feeling today's your day.",
+                "Come to me, and maybe you'll find something you fancy in the stock.",
+                "Seeking treasures or just a friendly chat? Either way, you're in good company.",
+                "Well, well, well! A fresh face looking for my little corner of the world."
+            ],
+            "items": {
+                "ruby": 5,
+                "amber": 20,
+                "amberpearl": 10
+            }
+        },
+        {
+            "location": "Eikthyrnir",
+            "name": "Eikthyr",
+            "addname": true,
+            "quotes": [
+                "Across the meadows, mortal eyes gaze. What business do you have with the lord of these lands?",
+                "Beneath the open sky, you observe. Why do you disturb the peace of these meadows?",
+                "Meadow's edge, your gaze intrudes. What brings you to my presence?",
+                "The breeze carries hints of your distant gaze. Why do you disrupt the serenity of these open fields?",
+                "Through the tall grass, your eyes betray your curiosity. State your intent, seeker."
+            ],
+            "items": {
+                "trophy_deer": 1
+            }
+        },
+        {
+            "location": "GDKing",
+            "name": "Elder",
+            "addname": true,
+            "quotes": [
+                "Far beyond the woods, a watcher stands. Why do you gaze upon me?",
+                "Through the trees, your intent is blurred. What compels you to approach?",
+                "Your presence is known to me, human. Why do you seek me out?",
+                "The wind carries whispers of your approach. Speak, seeker, and reveal your intent.",
+                "In the shadows, you watch. Intruder, why do you seek the spirit of the forest?"
+            ],
+            "items": {
+                "ancientseed": 1
+            }
+        },
+        {
+            "location": "Bonemass",
+            "name": "Bonemass",
+            "addname": true,
+            "quotes": [
+                "Step forth, intruder. Become the prey of my insatiable appetite.",
+                "Come, make yourself known, and let me extend my invitation to your demise.",
+                "What dark quest compels you? The swamp awaits, eager to welcome you into the eternal night.",
+                "In murky depths, a distant observer emerges. Step forth and accept your fate: Death.",
+                "Eager to meet your destiny? As you sense my presence, I sense yours."
+            ],
+            "items": {
+                "witheredbone": 10
+            }
+        },
+        {
+            "location": "Dragonqueen",
+            "name": "Moder",
+            "addname": true,
+            "quotes": [
+                "Your contraptions betray your intrusion, wanderer. What folly drives you to unveil the dragon queen?",
+                "Let the skies resound with our roars, and our scales shimmer in the frozen light. You won't survive.",
+                "The ice mountains are attuned to your every move. We feel you. We see you.",
+                "Atop the world, you seek the dragon queen. You will find me, but you will not succeed.",
+                "How foolish you are to seek me. You are not the first, you will not be the last."
+            ],
+            "items": {
+                "dragonegg": 1
+            }
+        },
+        {
+            "location": "GoblinKing",
+            "name": "Yagluth",
+            "addname": true,
+            "quotes": [
+                "Do you hope to find me, or do you yearn for the embrace of the shadows?",
+                "Foolish wanderer. You navigate the dark, guided by misguided courage.",
+                "The shadows whisper of your approach. Come to your inevitable demise.",
+                "Prepare for decay's welcome, for here, life surrenders to the inevitable.",
+                "The stench of the living invades my domain. What do you hope to accomplish here?"
+            ],
+            "items": {
+                "goblintotem": 1
+            }
+        },
+        {
+            "location": "Mistlands_DvergrBossEntrance1",
+            "name": "Queen",
+            "addname": true,
+            "quotes": [
+                "The vibrations of your intrusion reach my chambers. What draws you into the heart of the hive?",
+                "Recognize the amalgamation of cunning and might standing before you. Your attempts are futile.",
+                "You stand on the precipice of my nest. What purpose guides you to challenge the Queen?",
+                "Witness the symbiotic prowess embodied in my form. You are not prepared to face me.",
+                "The scent of your arrival is spreading. You will be a feast for the hive. Come!"
+            ],
+            "items": {
+                "trophy_seeker_brute": 1
+            }
+        }
+    ]
+}
