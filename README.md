@@ -1,5 +1,3 @@
-[WORKS ON MISTLANDS] https://www.nexusmods.com/valheim/mods/2692
-
 # Boss Directions
 This mod allows you to offer boss-related items to any fire to get pointed to that boss nearest altar location.
 
