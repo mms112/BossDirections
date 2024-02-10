@@ -14,7 +14,7 @@ namespace BossDirections.Patches {
 			
 			var fireplaceObject = hoverObject.GetComponent<Fireplace>();
 			var fireplaceParent = hoverObject.GetComponentInParent<Fireplace>();
-			if (fireplaceObject == null && fireplaceParent == null) return false;
+			if (fireplaceObject == null && fireplaceParent == null) return true;
 
 			var offered = BossDirections.TryOffer(item);
 			if (offered) return false;
