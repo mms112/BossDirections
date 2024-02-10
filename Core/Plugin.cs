@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
@@ -19,6 +20,10 @@ using System.Reflection;
  * 
  * [0.1.0]
  * Adding pinless config/mode (default: true).
+ * 
+ * [0.2.0]
+ * Moving patch to player.usehotbaritem so it happens before usefultrophies.
+ * Moving pinless config to an actualy config file instead of using a json (offerings are still on a json).
 */
 
 namespace BossDirections {
@@ -27,27 +32,27 @@ namespace BossDirections {
 	public class BossDirections : BaseUnityPlugin {
 		// core stuff
 		public static bool debug = true;
+		public static ConfigFile configFile;
+		public static ConfigEntry<bool> configPinless;
 		public static List<Offering> offerings;
-		public static ConfigJson config;
 
 		private void Awake() {
 			Bar();
 			Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), "fiote.mods.bossdirections");
 			Debug("Awake");
-			LoadConfig();
 			LoadOfferings();
+			SetupConfig();
 			Bar();
 		}
 
 		#region SETUP
 
-		void LoadConfig() {
+		void SetupConfig() {
 			Line();
-			Debug("LoadConfig()");
-			config = new ConfigJson();
-			var jsondata = JsonLoader.LoadJsonFile<ConfigJson>("config.json");
-			if (jsondata != null) config = jsondata;
-			Debug("Config loaded: pinless=" + config.pinless);
+			Debug("SetupConfig()");
+			configFile = Config;
+			Config.Bind("General", "NexusID", 2692, "NexusMods ID for updates.");			
+			configPinless = Config.Bind("General", "Pinless", true, "Keep the offerings camera-only, without pinning on your map.");
 		}
 
 		void LoadOfferings() {
@@ -126,7 +131,7 @@ namespace BossDirections {
 			// getting the player location
 			var point = player.gameObject.transform.position;
 
-			if (config.pinless) {
+			if (configPinless.Value) {
 				Log("Discovering location in Pinless mode...");
 				ZoneSystem.LocationInstance closest;
 				ZoneSystem.instance.FindClosestLocation(bossLocation, point, out closest);
@@ -166,10 +171,6 @@ namespace BossDirections {
 
 		#endregion
 	}
-}
-
-public class ConfigJson {
-	public bool pinless;
 }
 
 public class OfferingsJson {
