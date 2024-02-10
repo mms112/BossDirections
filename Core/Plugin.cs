@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using System.Collections.Generic;
@@ -24,10 +24,13 @@ using System.Reflection;
  * [0.2.0]
  * Moving patch to player.usehotbaritem so it happens before usefultrophies.
  * Moving pinless config to an actualy config file instead of using a json (offerings are still on a json).
+
+ * [0.2.1]
+ * Checking for fireplaces before offering.
 */
 
 namespace BossDirections {
-	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.0")]
+	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.1")]
 
 	public class BossDirections : BaseUnityPlugin {
 		// core stuff
