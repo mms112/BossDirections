@@ -27,10 +27,13 @@ using System.Reflection;
 
  * [0.2.1]
  * Checking for fireplaces before offering.
+
+ * [0.2.2]
+ * Fixing return values on useHotBarItem.
 */
 
 namespace BossDirections {
-	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.1")]
+	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.2")]
 
 	public class BossDirections : BaseUnityPlugin {
 		// core stuff
