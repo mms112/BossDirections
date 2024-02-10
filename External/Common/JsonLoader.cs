@@ -2,7 +2,6 @@
 using LitJson;
 using System.IO;
 using System.Reflection;
-using UnityEngine;
 
 
 public static class JsonLoader {
