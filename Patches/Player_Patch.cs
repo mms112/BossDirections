@@ -7,17 +7,19 @@ namespace BossDirections.Patches {
 		[HarmonyPrefix]
 		static bool Prefix(Player __instance, int index) {
 			var item = __instance.GetInventory().GetItemAt(index - 1, 0);
-			if (item == null) return false;
+			if (item == null) return true;
 
 			var hoverObject = __instance.GetHoverObject();
-			if (hoverObject == null) return false;
+			if (hoverObject == null) return true;
 			
 			var fireplaceObject = hoverObject.GetComponent<Fireplace>();
 			var fireplaceParent = hoverObject.GetComponentInParent<Fireplace>();
 			if (fireplaceObject == null && fireplaceParent == null) return false;
 
 			var offered = BossDirections.TryOffer(item);
-			return !offered;
+			if (offered) return false;
+
+			return true;
 		}
 	}
 
