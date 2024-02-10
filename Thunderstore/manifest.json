@@ -1,6 +1,6 @@
 ﻿{
     "name": "BossDirections",
-    "version_number": "0.2.2",
+    "version_number": "0.2.3",
     "website_url": "https://github.com/fiote/valheim-bossdirections",
     "description": "Allow you to make fire oferrings to get tips of where to find bosses.",
     "dependencies": [

@@ -30,10 +30,13 @@ using System.Reflection;
 
  * [0.2.2]
  * Fixing return values on useHotBarItem.
+
+ * [0.2.3]
+ * Fixing return values on useHotBarItem.
 */
 
 namespace BossDirections {
-	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.2")]
+	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.3")]
 
 	public class BossDirections : BaseUnityPlugin {
 		// core stuff
