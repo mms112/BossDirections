@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 /*
  * [0.0.1]
@@ -36,6 +37,111 @@ using System.Reflection;
 */
 
 namespace BossDirections {
+
+    public static class Extensions
+    {
+        private static readonly string[] vendors = { "Vendor_BlackForest", "Hildir_camp", "BogWitch_Camp" };
+
+        private static Offering GetOffering(this ItemDrop.ItemData item, out int numItems)
+        {
+            // checking all offerings
+            foreach (var offering in BossDirections.offerings)
+            {
+                // checking items for each offering
+                foreach (var offitem in offering.items)
+                {
+                    // checking if the item is right
+                    if ("$item_" + offitem.Key.ToLower() == item.m_shared.m_name.ToLower())
+                    {
+                        numItems = offitem.Value;
+                        return offering;
+                    }
+                }
+            }
+
+            numItems = 0;
+            return null;
+        }
+
+        public static bool TryOffer(this Fireplace target, Humanoid user, ItemDrop.ItemData item)
+        {
+            ZoneSystem.LocationInstance loc;
+            int numItems;
+            Offering offering = item.GetOffering(out numItems);
+
+            if (offering == null)
+                return false;
+
+            if (offering.boss_location == "")
+            {
+                BossDirections.TryOffer(offering, user, item, numItems);
+                return true;
+            }
+
+            for (int i = 0; i < vendors.Length; i++)
+            {
+                if (ZoneSystem.instance.FindClosestLocation(vendors[i], target.transform.position, out loc))
+                {
+                    if (Vector3.Distance(target.transform.position, loc.m_position) < loc.m_location.m_exteriorRadius)
+                    {
+                        //All offers are allowed in vendor location
+                        BossDirections.TryOffer(offering, user, item, numItems);
+                        return true;
+                    }
+                }
+            }
+
+            user.Message(MessageHud.MessageType.Center, $"Das Opfer für {offering.name} kann hier nicht erbracht werden");
+            return true;
+        }
+
+        public static bool TryOffer(this Vegvisir target, Humanoid user, ItemDrop.ItemData item)
+        {
+            int numItems;
+            Offering offering = item.GetOffering(out numItems);
+
+            if (offering == null)
+                return false;
+
+            if ((offering.boss_location == "") || (target.m_locations[0].m_locationName == offering.boss_location))
+            {
+                BossDirections.TryOffer(offering, user, item, numItems);
+                return true;
+            }
+
+            user.Message(MessageHud.MessageType.Center, $"Das Opfer für {offering.name} kann hier nicht erbracht werden");
+            return true;
+        }
+
+        public static bool TryOffer(this OfferingBowl target, Humanoid user, ItemDrop.ItemData item)
+        {
+            ZoneSystem.LocationInstance loc;
+            int numItems;
+            Offering offering = item.GetOffering(out numItems);
+
+            if (offering == null)
+                return false;
+
+            if (offering.boss_location == "")
+            {
+                BossDirections.TryOffer(offering, user, item, numItems);
+                return true;
+            }
+
+            if (ZoneSystem.instance.FindClosestLocation(offering.boss_location, target.transform.position, out loc))
+            {
+                if (Vector3.Distance(target.transform.position, loc.m_position) < loc.m_location.m_exteriorRadius)
+                {
+                    BossDirections.TryOffer(offering, user, item, numItems);
+                    return true;
+                }
+            }
+
+            user.Message(MessageHud.MessageType.Center, $"Das Opfer für {offering.name} kann hier nicht erbracht werden");
+            return true;
+        }
+    }
+
 	[BepInPlugin("fiote.mods.bossdirections", "BossDirections", "0.2.3")]
 
 	public class BossDirections : BaseUnityPlugin {
@@ -84,74 +190,40 @@ namespace BossDirections {
 
 		#endregion
 		#region METHODS
-		public static bool TryOffer(ItemDrop.ItemData item) {
+		public static void TryOffer(Offering offering, Humanoid user, ItemDrop.ItemData item, int neededAmount) {
 			var iname = item.m_shared.m_name.ToLower();
-			Log($"Fireplace_UseItem_Patch Prefix {iname} stack={item.m_stack}");
-
-			var neededAmount = 0;
-			var bossLocation = "";
-			var bossName = "";
-			var addname = false;
-			var talks = new List<string>();
-
-			// checking all offerings
-			offerings.ForEach(offering => {
-				// checking items for each offering
-				foreach (var offitem in offering.items) {
-					// checking if the item is right
-					if ("$item_" + offitem.Key.ToLower() == iname) {
-						// setting all the values needed for this to work
-						neededAmount = offitem.Value;
-						bossLocation = offering.location;
-						bossName = offering.name;
-						talks = offering.quotes;
-						addname = offering.addname;
-					}
-				}
-			});
-
-			Log($"neededAmount={neededAmount} bossCode={bossLocation} bossName={bossName} talks={talks.Count}");
-
-			// if we did not find a location, stop here
-			if (bossLocation == "") return false;
-
-			var player = Player.m_localPlayer;
+            var stack = user.GetInventory().CountItems(item.m_shared.m_name);
+            Log($"Fireplace_UseItem_Patch Prefix {iname} stack={stack}");
+			Log($"neededAmount={neededAmount} bossCode={offering.location} bossName={offering.name} talks={offering.quotes.Count}");
 
 			// if the player doesnt have the needed amount
-			if (item.m_stack < neededAmount) {
-				// let they know
-				player.Message(MessageHud.MessageType.Center, "$msg_toofew " + iname);
-				// return true because this was an offering item
-				return true;
+			if (stack < neededAmount) {
+				user.Message(MessageHud.MessageType.Center, "$msg_toofew " + iname);
 			}
 
-			// getting a random boss quote
-			var rnd = new System.Random();
-			var randomIndex = rnd.Next(talks.Count);
-			var bossTalk = talks[randomIndex];
-			if (addname) bossTalk = $"[{bossName}]: " + bossTalk;
+			var bossTalk = "Der Weg offenbart sich dir...";
+			if (offering.addname) bossTalk = $"[{offering.name}]: " + bossTalk;
 
 			// removing the item from the player's inventory
-			player.GetInventory().RemoveItem(item.m_shared.m_name, neededAmount);
+			user.GetInventory().RemoveItem(item.m_shared.m_name, neededAmount);
 
 			// showing the boss quote
-			player.Message(MessageHud.MessageType.Center, bossTalk);
+			user.Message(MessageHud.MessageType.Center, bossTalk);
 
 			// getting the player location
-			var point = player.gameObject.transform.position;
+			var point = user.gameObject.transform.position;
 
 			if (configPinless.Value) {
 				Log("Discovering location in Pinless mode...");
 				ZoneSystem.LocationInstance closest;
-				ZoneSystem.instance.FindClosestLocation(bossLocation, point, out closest);
+				ZoneSystem.instance.FindClosestLocation(offering.location, point, out closest);
 				Player.m_localPlayer.SetLookDir(closest.m_position - Player.m_localPlayer.transform.position, 3.5f);
 			} else {
 				Log("Discovering location in normal mode...");
-				Game.instance.DiscoverClosestLocation(bossLocation, point, bossName, (int)Minimap.PinType.Boss, false, false);
+				Game.instance.DiscoverClosestLocation(offering.location, point, offering.name, (int)Minimap.PinType.Boss, false, false);
 			}
 
 			Log("Offering done!");
-			return true;
 		}
 
 		#endregion
@@ -189,6 +261,7 @@ public class OfferingsJson {
 public class Offering {
 	public string location, name;
 	public bool addname;
+    public string boss_location;
 	public List<string> quotes;
 	public Dictionary<string, int> items;
 }
